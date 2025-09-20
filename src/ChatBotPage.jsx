@@ -1,54 +1,154 @@
-import { useState, useRef, useEffect } from "react";
-import { Send, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
+import { useState } from "react";
 
-export default function ChatbotPage({ onBack }) {
-  const [messages, setMessages] = useState([]);
-  const [chatInput, setChatInput] = useState("");
-  const ref = useRef(null);
+export default function ChatPage({ onBack }) {
+  const [val, setVal] = useState("");
 
-  useEffect(() => {
-    if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
-  }, [messages]);
-
-  function handleSend(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    if (!chatInput.trim()) return;
-    const u = { id: Date.now(), who: "user", text: chatInput };
-    const b = { id: Date.now() + 1, who: "bot", text: "BayMax: (I’m here — how can I help?)" };
-    setMessages((prev) => [...prev, u, b]);
-    setChatInput("");
+    if (!val.trim()) return;
+    // placeholder action
+    alert("BayMax (demo): " + val);
+    setVal("");
   }
 
   return (
     <div className="chat-page">
-      <header className="chat-header chat-header-gradient">
-        <button className="btn-icon" onClick={onBack} aria-label="Back">
+      <style>{`
+        .chat-page {
+          --bg: #f9fafb;
+          --text: #0f172a;
+          --muted: #64748b;
+          --border: #e5e7eb;
+          --blue: #2563eb;
+          --blue-light: #eef5ff;
+
+          background: var(--bg);
+          color: var(--text);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          font-family: Inter, system-ui, sans-serif;
+        }
+
+        /* Header */
+        .tasks-header {
+          position: sticky;
+          top: 0;
+          background: #fff;
+          border-bottom: 1px solid var(--border);
+          display: flex;
+          align-items: center;
+          padding: 12px 16px;
+          gap: 12px;
+          z-index: 10;
+        }
+        .tasks-header h1 {
+          flex: 1;
+          text-align: center;
+          margin: 0;
+          font-size: 20px;
+          font-weight: 700;
+        }
+        .resource-back-btn {
+          width: 40px;
+          height: 40px;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          background: #f1f5f9;
+          display: grid;
+          place-items: center;
+          color: var(--text);
+          cursor: pointer;
+          transition: background 0.2s, transform 0.08s;
+        }
+        .resource-back-btn:hover {
+          background: var(--blue-light);
+          transform: translateY(-1px);
+        }
+
+        /* Main */
+        .simple-main {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 20px;
+          gap: 16px;
+        }
+
+        /* Chat form */
+        .chat-form.big {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 10px;
+          align-items: center;
+          background: #fff;
+          padding: 10px;
+          border-radius: 14px;
+          border: 1px solid var(--border);
+          box-shadow: 0 4px 12px rgba(15,23,42,0.06);
+        }
+        .chat-input {
+          border: none;
+          outline: none;
+          background: #fff;
+          padding: 12px 14px;
+          font-size: 14px;
+          border-radius: 10px;
+          color: var(--text);
+        }
+        .chat-send {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: var(--blue);
+          border: none;
+          color: #fff;
+          font-weight: 600;
+          padding: 10px 14px;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: filter 0.2s;
+        }
+        .chat-send:hover {
+          filter: brightness(0.95);
+        }
+        .send-icon {
+          width: 16px;
+          height: 16px;
+        }
+
+        /* Placeholder text */
+        .muted {
+          text-align: center;
+          font-size: 14px;
+          color: var(--muted);
+        }
+      `}</style>
+
+      <header className="tasks-header">
+        <button className="resource-back-btn" onClick={onBack} aria-label="back">
           <ArrowLeft />
         </button>
-        <div className="chat-title">BayMax Chat</div>
+        <h1>Chatbot</h1>
+        <div className="spacer-ghost" />
       </header>
 
-      <div className="chat-area" ref={ref}>
-        {messages.length === 0 && <div className="chat-empty">Say hello — this is a mock chat UI.</div>}
-        {messages.map((m) => (
-          <div key={m.id} className={`chat-bubble ${m.who === "user" ? "user" : "bot"}`}>
-            {m.text}
-          </div>
-        ))}
-      </div>
-
-      <form onSubmit={handleSend} className="chat-input-row">
-        <input
-          value={chatInput}
-          onChange={(e) => setChatInput(e.target.value)}
-          placeholder="Type a message..."
-          className="chat-input-full"
-          aria-label="Type message"
-        />
-        <button type="submit" className="chat-send-full" aria-label="Send">
-          <Send />
-        </button>
-      </form>
+      <main className="simple-main">
+        <form className="chat-form big" onSubmit={handleSubmit}>
+          <input
+            className="chat-input"
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            placeholder="Talk to BayMax..."
+          />
+          <button className="chat-send">
+            Send <Send className="send-icon" />
+          </button>
+        </form>
+        <p className="muted">Demo placeholder — hook up your chatbot logic here.</p>
+      </main>
     </div>
   );
 }

@@ -1,14 +1,37 @@
 import { useState } from "react";
 import HomePage from "./HomePage";
-import ChatbotPage from "./ChatbotPage";
+import ResourceHubPage from "./ResourceHubPage";
+import DailyTasksPage from "./DailyTasksPage";
+import ChatPage from "./ChatBotPage";
+import JournalPage from "./JournalPage";
+import "./index.css";
 
 export default function App() {
-  const [view, setView] = useState("home");
+  const [screen, setScreen] = useState("home");
 
   return (
     <>
-      {view === "home" && <HomePage onOpenChat={() => setView("chat")} />}
-      {view === "chat" && <ChatbotPage onBack={() => setView("home")} />}
+      {screen === "home" && (
+        <HomePage
+          onOpenChat={() => setScreen("chat")}
+          onOpenJournal={() => setScreen("journal")}
+          onOpenResourceHub={(target) => {
+            if (target === "dailyTasks") setScreen("dailyTasks");
+            else setScreen("resourceHub");
+          }}
+        />
+      )}
+
+      {screen === "resourceHub" && (
+        <ResourceHubPage onBack={() => setScreen("home")} />
+      )}
+
+      {screen === "dailyTasks" && (
+        <DailyTasksPage onBack={() => setScreen("home")} />
+      )}
+
+      {screen === "chat" && <ChatPage onBack={() => setScreen("home")} />}
+      {screen === "journal" && <JournalPage onBack={() => setScreen("home")} />}
     </>
   );
 }
