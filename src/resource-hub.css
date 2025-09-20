@@ -1,0 +1,139 @@
+/* ========= Resource Hub Basic Light Theme ========= */
+
+.resource-hub-page {
+  background: #ffffff;   /* white page background */
+  color: #1e293b;        /* dark gray text */
+  font-family: sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Header */
+.resource-header {
+  border-bottom: 2px solid #e2e8f0; /* light gray line */
+  padding: 12px 0;
+  margin-bottom: 20px;
+}
+.resource-title h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #1e293b;
+}
+.resource-subtitle {
+  font-size: 14px;
+  color: #64748b;
+}
+
+/* Section navigation buttons */
+.section-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.section-btn {
+  background: #f8fafc;   /* light background */
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.section-btn:hover {
+  background: #e0f2fe;   /* light blue hover */
+}
+.section-btn.active {
+  background: #bfdbfe;   /* blue accent when active */
+  border-color: #60a5fa;
+  color: #0f172a;
+}
+
+/* Content cards */
+.content-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 16px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.card-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+.card-subtitle {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Category & lists */
+.category-title {
+  font-weight: bold;
+  margin: 12px 0 6px;
+  color: #facc15; /* yellow accent for headings */
+}
+.bullet-list {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+.bullet-list li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* Media grid */
+.media-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.media-card {
+  background: #f9fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+}
+.media-title {
+  margin: 6px 0;
+  font-weight: bold;
+}
+.media-description {
+  font-size: 13px;
+  color: #475569;
+}
+.media-duration {
+  font-size: 12px;
+  color: #334155;
+  margin-top: 6px;
+}
+
+/* Language buttons */
+.language-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+.language-btn {
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+  font-size: 13px;
+  cursor: pointer;
+}
+.language-btn:hover {
+  background: #e0f2fe; /* light blue hover */
+}
+.language-btn.selected {
+  background: #bfdbfe; /* blue active */
+  border-color: #60a5fa;
+  font-weight: bold;
+}

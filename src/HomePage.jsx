@@ -1,29 +1,57 @@
-// src/HomePage.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Menu,
   Users,
   Activity,
-  Gamepad2,
   Send,
   Calendar,
   MessageCircle,
   BookOpen,
+  GraduationCap,
+  Trophy,
 } from "lucide-react";
 
-export default function HomePage({ onOpenChat }) {
+export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
 
-  // Sliders state
+  // points shown in header
+  const [totalPoints, setTotalPoints] = useState(0);
+
+  // sliders
   const [happyLevel, setHappyLevel] = useState(60);
   const [energyLevel, setEnergyLevel] = useState(45);
+
+  // localStorage-backed task completion so tile shows progress
+  const [completedTasks, setCompletedTasks] = useState({});
+
+  // only for counting on the tile (the real list lives in DailyTasksPage)
+  const dailyTasks = [
+    { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 },
+    { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 },
+  ];
+
+  useEffect(() => {
+    const savedCompletedTasks = localStorage.getItem("completedTasks");
+    const savedPoints = localStorage.getItem("totalPoints");
+    if (savedCompletedTasks) setCompletedTasks(JSON.parse(savedCompletedTasks));
+    if (savedPoints) setTotalPoints(parseInt(savedPoints, 10));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+  }, [completedTasks]);
+
+  const getCompletedTasksCount = () => {
+    const today = new Date().toDateString();
+    return dailyTasks.filter((t) => completedTasks[`${t.id}-${today}`]).length;
+  };
 
   function handleSend(e) {
     e.preventDefault();
     if (!chatInput.trim()) return;
     setChatInput("");
-    onOpenChat(); // quick-entry to full chat page
+    onOpenChat();
   }
 
   return (
@@ -52,6 +80,21 @@ export default function HomePage({ onOpenChat }) {
             AK
           </button>
         </div>
+
+        {/* Points Bar */}
+        <div className="points-bar">
+          <div className="points-info">
+            <Trophy className="points-icon" />
+            <span className="points-text">{totalPoints} Points</span>
+          </div>
+          <div className="points-progress">
+            <div
+              className="points-progress-fill"
+              style={{ width: `${Math.min(totalPoints % 100, 100)}%` }}
+            />
+          </div>
+          <div className="points-level">Level {Math.floor(totalPoints / 100) + 1}</div>
+        </div>
       </header>
 
       {/* Sidebar overlay */}
@@ -67,7 +110,7 @@ export default function HomePage({ onOpenChat }) {
             </div>
 
             <nav className="sidebar-nav">
-              {/* CHATBOT entry in the menu */}
+              {/* Chatbot */}
               <button
                 onClick={() => {
                   onOpenChat();
@@ -79,8 +122,10 @@ export default function HomePage({ onOpenChat }) {
                 <span>Chatbot</span>
               </button>
 
+              {/* Journal */}
               <button
                 onClick={() => {
+                  onOpenJournal();
                   setSidebarOpen(false);
                 }}
                 className="nav-item"
@@ -88,15 +133,45 @@ export default function HomePage({ onOpenChat }) {
                 <BookOpen className="nav-icon" /> <span>Journal</span>
               </button>
 
-              <button onClick={() => { setSidebarOpen(false); }} className="nav-item">
+              {/* Resource Hub */}
+              <button
+                onClick={() => {
+                  onOpenResourceHub("resourceHub"); // keep hub accessible
+                  setSidebarOpen(false);
+                }}
+                className="nav-item"
+              >
+                <GraduationCap className="nav-icon" /> <span>Resource Hub</span>
+              </button>
+
+              {/* Activities -> Daily Tasks page */}
+              <button
+                onClick={() => {
+                  onOpenResourceHub("dailyTasks");
+                  setSidebarOpen(false);
+                }}
+                className="nav-item"
+              >
+                <Activity className="nav-icon" /> <span>Activities</span>
+              </button>
+
+              {/* Community (placeholder) */}
+              <button
+                onClick={() => {
+                  setSidebarOpen(false);
+                }}
+                className="nav-item"
+              >
                 <Users className="nav-icon" /> <span>Community</span>
               </button>
 
-              <button onClick={() => { setSidebarOpen(false); }} className="nav-item">
-                <Activity className="nav-icon" /> <span>Activity</span>
-              </button>
-
-              <button onClick={() => { setSidebarOpen(false); }} className="nav-item">
+              {/* Counseling (placeholder) */}
+              <button
+                onClick={() => {
+                  setSidebarOpen(false);
+                }}
+                className="nav-item"
+              >
                 <Calendar className="nav-icon" /> <span>Book Counseling</span>
               </button>
             </nav>
@@ -145,19 +220,33 @@ export default function HomePage({ onOpenChat }) {
 
         {/* Tiles */}
         <div className="tiles-grid">
-          <button className="tile tile-journal" aria-label="Journal">
+          {/* Journal */}
+          <button
+            className="tile tile-journal"
+            onClick={() => onOpenJournal()}
+            aria-label="Journal"
+          >
             <div className="tile-left">
-              <div className="tile-icon circle-purple"><BookOpen /></div>
+              <div className="tile-icon circle-purple">
+                <BookOpen />
+              </div>
             </div>
             <div className="tile-body">
               <div className="tile-title">Journal</div>
               <div className="tile-sub">Log your daily journal</div>
             </div>
           </button>
-
-          <button className="tile tile-community" onClick={() => {}} aria-label="Community">
+          
+          {/* Community (placeholder) */}
+          <button
+            className="tile tile-community"
+            onClick={() => {}}
+            aria-label="Community"
+          >
             <div className="tile-left">
-              <div className="tile-icon circle-green"><Users /></div>
+              <div className="tile-icon circle-green">
+                <Users />
+              </div>
             </div>
             <div className="tile-body">
               <div className="tile-title">Community</div>
@@ -165,19 +254,35 @@ export default function HomePage({ onOpenChat }) {
             </div>
           </button>
 
-          <button className="tile tile-activities" onClick={() => {}} aria-label="Activities">
+          {/* Activities -> open Daily Tasks page */}
+          <button
+            className="tile tile-activities"
+            onClick={() => onOpenResourceHub("dailyTasks")}
+            aria-label="Activities"
+          >
             <div className="tile-left">
-              <div className="tile-icon circle-yellow"><Activity /></div>
+              <div className="tile-icon circle-yellow">
+                <Activity />
+              </div>
             </div>
             <div className="tile-body">
               <div className="tile-title">Activities</div>
-              <div className="tile-sub">Track your progress</div>
+              <div className="tile-sub">
+                {getCompletedTasksCount()}/10 completed today
+              </div>
             </div>
           </button>
 
-          <button className="tile tile-counsel" onClick={() => {}} aria-label="Book Counseling">
+          {/* Counseling (placeholder) */}
+          <button
+            className="tile tile-counsel"
+            onClick={() => {}}
+            aria-label="Book Counseling"
+          >
             <div className="tile-left">
-              <div className="tile-icon circle-orange"><Calendar /></div>
+              <div className="tile-icon circle-orange">
+                <Calendar />
+              </div>
             </div>
             <div className="tile-body">
               <div className="tile-title">Book Counseling</div>

@@ -133,7 +133,7 @@ button { cursor: pointer;
 .close-plain {
   background:none;
   border:none;
-  color:#475569;
+  color:#8c9aad;
   cursor:pointer;
 }
 .sidebar-nav {
@@ -152,7 +152,7 @@ button { cursor: pointer;
   border:none;
   background:transparent;
   cursor:pointer;
-  color:#0f172a;
+  color:#636d86;
   font-weight:600;
   transition:background .18s ease, transform .12s ease;
 }
@@ -182,7 +182,7 @@ button { cursor: pointer;
   font-size:20px;
   font-weight:700;
   margin-bottom:18px;
-  color:#0f172a;
+  color:#223050;
   text-align:left;
   width:100%;
   max-width:680px;
