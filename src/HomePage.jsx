@@ -11,7 +11,12 @@ import {
   Trophy,
 } from "lucide-react";
 
-export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal }) {
+export default function HomePage({
+  onOpenChat,
+  onOpenResourceHub,
+  onOpenJournal,
+  onOpenCommunity, // 👈 added
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
 
@@ -26,10 +31,7 @@ export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal 
   const [completedTasks, setCompletedTasks] = useState({});
 
   // only for counting on the tile (the real list lives in DailyTasksPage)
-  const dailyTasks = [
-    { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 },
-    { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 },
-  ];
+  const dailyTasks = Array.from({ length: 10 }, (_, i) => ({ id: i + 1 }));
 
   useEffect(() => {
     const savedCompletedTasks = localStorage.getItem("completedTasks");
@@ -93,7 +95,9 @@ export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal 
               style={{ width: `${Math.min(totalPoints % 100, 100)}%` }}
             />
           </div>
-          <div className="points-level">Level {Math.floor(totalPoints / 100) + 1}</div>
+          <div className="points-level">
+            Level {Math.floor(totalPoints / 100) + 1}
+          </div>
         </div>
       </header>
 
@@ -104,7 +108,10 @@ export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal 
           <aside className="sidebar">
             <div className="sidebar-head">
               <div className="sidebar-title">Menu</div>
-              <button className="close-plain" onClick={() => setSidebarOpen(false)}>
+              <button
+                className="close-plain"
+                onClick={() => setSidebarOpen(false)}
+              >
                 Close
               </button>
             </div>
@@ -136,12 +143,13 @@ export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal 
               {/* Resource Hub */}
               <button
                 onClick={() => {
-                  onOpenResourceHub("resourceHub"); // keep hub accessible
+                  onOpenResourceHub("resourceHub");
                   setSidebarOpen(false);
                 }}
                 className="nav-item"
               >
-                <GraduationCap className="nav-icon" /> <span>Resource Hub</span>
+                <GraduationCap className="nav-icon" />{" "}
+                <span>Resource Hub</span>
               </button>
 
               {/* Activities -> Daily Tasks page */}
@@ -155,9 +163,10 @@ export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal 
                 <Activity className="nav-icon" /> <span>Activities</span>
               </button>
 
-              {/* Community (placeholder) */}
+              {/* Community */}
               <button
                 onClick={() => {
+                  onOpenCommunity(); // 👈 navigate to community
                   setSidebarOpen(false);
                 }}
                 className="nav-item"
@@ -236,11 +245,11 @@ export default function HomePage({ onOpenChat, onOpenResourceHub, onOpenJournal 
               <div className="tile-sub">Log your daily journal</div>
             </div>
           </button>
-          
-          {/* Community (placeholder) */}
+
+          {/* Community */}
           <button
             className="tile tile-community"
-            onClick={() => {}}
+            onClick={() => onOpenCommunity()} // 👈 navigate to community
             aria-label="Community"
           >
             <div className="tile-left">

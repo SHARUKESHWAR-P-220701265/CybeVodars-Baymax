@@ -4,6 +4,7 @@ import ResourceHubPage from "./ResourceHubPage";
 import DailyTasksPage from "./DailyTasksPage";
 import ChatPage from "./ChatBotPage";
 import JournalPage from "./JournalPage";
+import CommunityPage from "./CommunityPage"; // 👈 add this
 import "./index.css";
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
         <HomePage
           onOpenChat={() => setScreen("chat")}
           onOpenJournal={() => setScreen("journal")}
+          onOpenCommunity={() => setScreen("community")}   // 👈 handle community
           onOpenResourceHub={(target) => {
             if (target === "dailyTasks") setScreen("dailyTasks");
             else setScreen("resourceHub");
@@ -32,6 +34,10 @@ export default function App() {
 
       {screen === "chat" && <ChatPage onBack={() => setScreen("home")} />}
       {screen === "journal" && <JournalPage onBack={() => setScreen("home")} />}
+
+      {screen === "community" && (                        // 👈 new screen
+        <CommunityPage onBack={() => setScreen("home")} />
+      )}
     </>
   );
 }
